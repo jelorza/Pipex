@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 18:03:22 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/04/11 20:25:10 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:48:53 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc != 5)
 	{
-		write (1, "error de argumentos amigo", 25);
+		write (1, "", 25);
 		exit (0);
 	}
 	else
