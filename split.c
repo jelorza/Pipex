@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:37:33 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/04/10 17:58:58 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/04/11 19:14:12 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ char	**ft_split(char *str, char c)
 
 	i = 0;
 	sub_str = ft_substr_counter(str, c);
+	if (sub_str == 0)
+	{
+		write(1, "comando vacio\n", 13);
+		exit(1);
+	}	
 	bi_str_cmd = malloc(sizeof (char **) * sub_str + 1);
 	while (i < sub_str)
 	{

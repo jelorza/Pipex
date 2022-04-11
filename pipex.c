@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 18:03:22 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/04/10 20:29:36 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/04/11 20:25:10 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,77 +35,6 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-void	ft_process_pipe(t_pipe_args *data, t_pipe_routes *routes, char **env)
-{
-	t_pipe_fds	fds;
-	int			pid1;	
-	int			pid2;
-	int			status;
-
-	fds.fd_infile = open(data->infile, O_RDONLY);
-	fds.fd_outfile = open(data->outfile, O_WRONLY | O_TRUNC | O_CREAT, 0777);
-	pipe(fds.fd1);
-	pid1 = fork();
-	if (pid1 == 0)
-	{
-		close (fds.fd1[0]);
-		dup2 (fds.fd_infile, STDIN_FILENO);
-		dup2 (fds.fd1[1], STDOUT_FILENO);
-		close (fds.fd1[1]);
-		close (fds.fd_infile);
-		execve (routes->path_routes_cmd1[routes->x1], data->cmd1_split, env);
-		exit(0);
-	}
-	else
-	{
-		close(fds.fd1[1]);
-		waitpid(pid1, &status, 0);
-		pid2 = fork();
-		if (pid2 == 0)
-		{
-			dup2 (fds.fd1[0], STDIN_FILENO);
-			dup2 (fds.fd_outfile, STDOUT_FILENO);
-			close (fds.fd1[0]);
-			close (fds.fd_outfile);
-			execve (routes->path_routes_cmd2[routes->x2],
-				data->cmd2_split, env);
-			exit(0);
-		}
-		else
-		{
-			close (fds.fd1[0]);
-			waitpid(pid2, &status, 0);
-		}
-	}
-}
-
-void	ft_acces(t_pipe_args *data, t_pipe_routes *routes)
-{
-	int	i;
-	int	j;
-
-	routes->x1 = -1;
-	routes->x2 = -1;
-	i = 0;
-	while (routes->path_routes_cmd1[i])
-	{
-		j = access(routes->path_routes_cmd1[i], F_OK);
-		if (j == 0)
-			routes->x1 = i;
-		j = access(routes->path_routes_cmd2[i], F_OK);
-		if (j == 0)
-			routes->x2 = i;
-		i++;
-	}
-	printf("x1 = %d, x2 = %d\n", routes->x1, routes->x2);
-	if (routes->x1 == -1 || routes->x2 == -1)
-	{
-		write (1, "Comando no existe amigo\n", 24);
-		ft_free(data, routes);
-		exit(0);
-	}
-}
-
 void	ft_clean_args(char **argv, t_pipe_args *data)
 {
 	data->infile = argv[1];
@@ -124,12 +53,12 @@ void	ft_path_routes(char **env, t_pipe_routes *routes, t_pipe_args *data)
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], "PATH", 4) == 1)
-			ft_proces_path(env[i], routes, data);
+			ft_process_path(env[i], routes, data);
 		i++;
 	}
 }
 
-int	ft_proces_path(char *env, t_pipe_routes *routes, t_pipe_args *data)
+int	ft_process_path(char *env, t_pipe_routes *routes, t_pipe_args *data)
 {
 	int		i;
 	char	**temp1;
@@ -154,6 +83,15 @@ int	ft_proces_path(char *env, t_pipe_routes *routes, t_pipe_args *data)
 	}
 	temp2[i] = 00;
 	free(temp1);
+	ft_process_path_end(routes, temp2, data);
+	return (0);
+}
+
+void	ft_process_path_end(t_pipe_routes *routes,
+	char **temp2, t_pipe_args *data)
+{
+	int	i;
+
 	i = -1;
 	while (++i < routes->path_routes_cant)
 	{
@@ -164,37 +102,4 @@ int	ft_proces_path(char *env, t_pipe_routes *routes, t_pipe_args *data)
 	routes->path_routes_cmd1[i] = 00;
 	routes->path_routes_cmd2[i] = 00;
 	free(temp2);
-	i = -1;
-	return (0);
-}
-
-void	ft_free(t_pipe_args *args, t_pipe_routes *routes)
-{
-	int	i;
-
-	i = -1;
-	if (args->cmd1_str_cant > 0)
-	{
-		while (++i < args->cmd1_str_cant)
-			free(args->cmd1_split[i]);
-	}
-	i = -1;
-	if (args->cmd2_str_cant > 0)
-	{
-		while (++i < args->cmd2_str_cant)
-			free(args->cmd2_split[i]);
-	}
-	i = -1;
-	if (routes->path_routes_cant > 0)
-	{
-		while (++i < routes->path_routes_cant)
-		{		
-			free(routes->path_routes_cmd1[i]);
-			free(routes->path_routes_cmd2[i]);
-		}
-	}	
-	free(args->cmd1_split);
-	free(args->cmd2_split);
-	free(routes->path_routes_cmd1);
-	free(routes->path_routes_cmd2);
 }
