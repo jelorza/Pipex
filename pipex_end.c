@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 20:27:42 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/04/11 20:48:48 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/04/14 19:13:04 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	ft_process_pipe(t_pipe_args *data, t_pipe_routes *routes, char **env)
 
 	fds.fd_infile = open(data->infile, O_RDONLY);
 	if (fds.fd_infile == -1)
-		perror("zsh:");
+		perror("zsh");
 	fds.fd_outfile = open(data->outfile, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 	pipe(fds.fd1);
 	pid1 = ft_fork1(routes, &fds, env, data);

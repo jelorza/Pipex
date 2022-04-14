@@ -6,7 +6,7 @@
 /*   By: jelorza- <jelorza-@student.42urduli>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 18:25:15 by jelorza-          #+#    #+#             */
-/*   Updated: 2022/04/11 20:35:37 by jelorza-         ###   ########.fr       */
+/*   Updated: 2022/04/14 19:09:38 by jelorza-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ int		ft_strncmp(char *s1, char *s2, int n);
 void	ft_free(t_pipe_args *args, t_pipe_routes *routes);
 int		ft_strlen(char *str);
 int		ft_process_path(char	*env, t_pipe_routes *routes, t_pipe_args *data);
-void	ft_process_path_end(t_pipe_routes *routes, char **temp2, t_pipe_args *data);
+void	ft_process_path_end(t_pipe_routes *routes,
+			char **temp2, t_pipe_args *data);
 char	*ft_join(char *src1, char *src2);
 void	ft_join_cmds(t_pipe_args *data);
 char	*ft_substr(char *str, int start, int end);
 void	ft_acces(t_pipe_args *data, t_pipe_routes *routes);
 void	ft_process_pipe(t_pipe_args *data, t_pipe_routes *routes, char **env);
-int		ft_fork1(t_pipe_routes *routes, t_pipe_fds *fds, char **env, t_pipe_args *data);
-int		ft_fork2(t_pipe_routes *routes, t_pipe_fds *fds, char **env, t_pipe_args *data);
+int		ft_fork1(t_pipe_routes *routes, t_pipe_fds *fds,
+			char **env, t_pipe_args *data);
+int		ft_fork2(t_pipe_routes *routes, t_pipe_fds *fds,
+			char **env, t_pipe_args *data);
 #endif
